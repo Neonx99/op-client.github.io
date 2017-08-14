@@ -434,6 +434,7 @@ a img		{ border: none; }
 }
 .wb_element_shape > div.wb_shp {
 	position: absolute;
+	opacity: 0.5
 	left: 0;
 	top: 0;
 	width: 100%;
