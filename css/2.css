@@ -2,7 +2,7 @@
 #wb_header { background: transparent none repeat scroll left top; height: 150px; }
 #wb_main { background: transparent none repeat scroll left top; height: 790px; padding-bottom: 50px; }
 #wb_footer { background: transparent none repeat-x scroll left top; height: 74px; }
-body { background:  #205396 url("../gallery_gen/5cb56d89ce9d79e51fbe4fc7a33d6221.jpg") no-repeat scroll center top; }
+body { background: #1b5988 url("../gallery_gen/5cb56d89ce9d79e51fbe4fc7a33d6221.jpg") no-repeat scroll center top; }
 .wb_sbg { background: transparent none repeat-x scroll left top; }
 body, .wb_sbg { min-width: 1200px; min-height: 1014px; }
 .root { width: 1200px; height: 1014px; overflow: visible; min-height: 1014px; }
@@ -22,7 +22,7 @@ body, .wb_sbg { min-width: 1200px; min-height: 1014px; }
 #wb_element_instance15 { left: 0px; top: 25px; min-width: 360px; width: 360px; min-height: 24px; height: 24px; display: block; z-index: 379; }
 #wb_element_instance16 { left: 630px; top: 460px; min-width: 390px; width: 390px; min-height: 68px; height: 68px; display: block; z-index: 139; }
 #wb_element_instance17 { left: 1020px; top: 450px; min-width: 170px; width: 170px; min-height: 170px; height: 170px; display: block; z-index: 276; }
-#wb_element_instance17 .wb_button { width: 170px; height: 170px; font-family: 'Roboto Condensed',sans-serif; font-size: 20px; text-align: center; border: 8px solid #ffeb00; border-radius: 100px; -webkit-border-radius: 100px; -moz-border-radius: 100px; color: #000000; font-style: normal; font-weight: bold; text-decoration: none; background: transparent none repeat scroll center center; }
+#wb_element_instance17 .wb_button { width: 170px; height: 170px; font-family: 'Roboto Condensed',sans-serif; font-size: 20px; text-align: center; border: 8px solid #ffeb00;; border-radius: 100px; -webkit-border-radius: 100px; -moz-border-radius: 100px; color: #000000; font-style: normal; font-weight: bold; text-decoration: none; background: transparent none repeat scroll center center; }
 #wb_element_instance17 .wb_button:hover { color: #ffff26; font-style: normal; font-weight: bold; text-decoration: none; background: transparent none repeat scroll center center; }
 #wb_element_instance17 .wb_button:active { color: #ffffff; font-style: normal; font-weight: bold; text-decoration: none; background: transparent none repeat scroll center center; }
 #wb_element_instance18 { left: 50px; top: 140px; min-width: 220px; width: 220px; min-height: 290px; height: 290px; display: block; z-index: 284; }
