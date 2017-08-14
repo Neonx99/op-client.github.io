@@ -105,8 +105,8 @@
                     window._client.target.y = dv.getInt16(3, true);
                 }
                 if(window._client.botMode === "Collect") {
-                    window._client.target.x = window._client.target.x += Math.random() * (500 - (-500)) + (-500);
-                    window._client.target.y = window._client.target.y += Math.random() * (500 - (-500)) + (-500);
+                    window._client.target.x =  Math.random() * (99999 - (-99999)) + (-99999);
+                    window._client.target.y =  Math.random() * (99999 - (-99999)) + (-99999);
                 }
             } else {
                 if (dv.getInt8(0, true) == 16) {
