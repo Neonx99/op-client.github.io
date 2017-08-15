@@ -70,9 +70,13 @@
             _client.botSocket.onmessage = function(msg) {
                 //console.log(msg);
                 var d = JSON.parse(msg.data);
-                _client.timer = d.time;
-                _client.botCount = d.packagee;
-                _client.maxBots = d.maxBots;
+                if(d.type === "info") {
+                	_client.timer = d.time;
+                	_client.maxBots = d.maxBots;
+                }
+                if(d.type == 'botCount') {
+                	_client.botCount = d.packagee;
+            	}
             };
         },
         botSend: function(buf) {
