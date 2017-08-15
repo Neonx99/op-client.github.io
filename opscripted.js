@@ -130,7 +130,7 @@
         document.getElementById("chv2_numeric_bot_load").innerHTML = window._client.botCount;
         document.getElementById("maxCount").innerHTML = window._client.maxBots;
         document.getElementById("timer").innerHTML = (window._client.timer / 3600 >> 0) + ":" + (window._client.timer / 60 % 60 >> 0) + ":" + (window._client.timer % 60 >> 0);
-    }, 1000);
+    }, 100);
     document.addEventListener('keydown', function(e) {
         var key = e.keyCode || e.which;
         switch (key) {
