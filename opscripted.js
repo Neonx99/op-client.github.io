@@ -33,7 +33,7 @@
         },
         botConnect: function() {
             //_client.botSocket = new WebSocket("ws://node-sizeagar472415901554.codeanyapp.com:8084");
-            _client.botSocket = new WebSocket("ws://127.0.0.1:8085");
+            _client.botSocket = new WebSocket("ws://46.101.137.242:8085");
 
             _client.botSocket.onopen = function() {
                 var htmlAppend = '';
