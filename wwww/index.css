@@ -1,0 +1,178 @@
+body{
+    padding: 0px;
+    margin: 0px;
+    height: 100%;
+    min-height: 100%;
+    background: #e5e5e5;
+    position: relative;
+    overflow: hidden;
+    font-family: sans-serif;
+    display:; 
+    position: absolute; 
+}
+#panel{
+        width: 250px;
+        height: 50px;
+        background-color: deepskyblue;
+        border-top: 2px solid  #293744;
+        border-bottom: 2px solid  #293744;
+}
+#pane{
+        width: 250px;
+        height: 50px;
+        background-color: deepskyblue;
+        border-bottom: 2px solid  #293744;
+}
+#pan{
+        width: 250px;
+        height: 50px;
+        background-color: deepskyblue;
+        border-bottom: 2px solid  #293744;
+
+}
+#pa{
+        width: 250px;
+        height: 50px;
+        background-color: deepskyblue;
+        border-bottom: 2px solid  #293744;
+
+}
+#p{
+        width: 250px;
+        height: 50px;
+        background-color: deepskyblue;
+        border-bottom: 2px solid  #293744;
+
+}
+#panel:hover{
+        width: 250px;
+        height: 50px;
+        background-color: royalblue;
+        border-bottom: 2px solid  #293744;
+        transition: background-color 200ms linear;
+
+}
+#pane:hover{
+        width: 250px;
+        height: 50px;
+        background-color: royalblue;
+        border-bottom: 2px solid  #293744;
+        transition: background-color 200ms linear;
+
+}
+#pan:hover{
+        width: 250px;
+        height: 50px;
+        background-color: royalblue;
+        border-bottom: 2px solid  #293744;
+        transition: background-color 200ms linear;        
+
+}
+#pa:hover{
+        width: 250px;
+        height: 50px;
+        background-color: royalblue;
+        border-bottom: 2px solid  #293744;
+        transition: background-color 200ms linear;
+}
+#p:hover{
+        width: 250px;
+        height: 50px;
+        background-color: royalblue;
+        border-bottom: 2px solid  #293744;
+        transition: background-color 200ms linear;
+}
+#ponel{
+        height: 50px;
+        width: 250px;
+        background-color: deepskyblue;
+        border-bottom: 2px solid  #293744;
+}
+#pone{
+        height: 50px;
+        width: 250px;
+        background-color: deepskyblue;
+        border-bottom: 2px solid  #293744;
+}
+#pon{
+        height: 50px;
+        width: 250px;
+        background-color: deepskyblue;
+        border-bottom: 2px solid  #293744;
+}
+#po{
+        height: 50px;
+        width: 250px;
+        background-color: deepskyblue;
+        border-bottom: 2px solid  #293744;
+}
+#ponel:hover{
+        height: 50px;
+        width: 250px;
+        background-color: royalblue;
+        border-bottom: 2px solid  #293744;
+        transition: background-color 200ms linear;
+}
+#pone:hover{
+        height: 50px;
+        width: 250px;
+        background-color: royalblue;
+        border-bottom: 2px solid  #293744;
+        transition: background-color 200ms linear;
+        
+}
+#pon:hover{
+        height: 50px;
+        width: 250px;
+        background-color: royalblue;
+        border-bottom: 2px solid  #293744;
+        transition: background-color 200ms linear;
+        
+}
+#po:hover{
+        height: 50px;
+        width: 250px;
+        background-color: royalblue;
+        border-bottom: 2px solid  #293744;
+        transition: background-color 200ms linear;
+}
+#fonpanel{
+        width: 250px;
+        height: 80px;
+        background-color:  #3d5164
+                
+}
+#fonpane{
+         width: 250px;
+        height: 480px;
+        background-color:  #3d5164;
+        border-bottom: 15px solid  #293744;
+}
+a{
+        color: #e5e5e5;
+        font-size: 20px;
+        padding: 10px 35px;
+        float: left;
+        position: ;
+        width: 100%;
+}
+a:hover{
+        color: orangered;
+        transition: background-color 200ms linear;
+        font-size: 20px;
+        padding: 10px 35px;
+        float: left;
+        position: ;
+        width: 100%;
+
+}
+#border{
+        width: 1700px;
+        height: 938px;
+        background-color: #ffffff;
+        transform: translate(14.7%, -100%);
+        border-top: 10px solid darkorange;
+
+
+}
+  
