@@ -4,8 +4,8 @@
 // @version      1.4.7
 // @description  ...
 // @author       Seyko - SizRex
-// @updateURL    http://op-client.tk/script.js
-// @downloadURL  function SizRex() {
+// @updateURL    http://op-client.tk/scriptDownload.js
+// @downloadURL  http://op-client.tk/scriptDownload.js
 // @match        http://agar.io/*
 // @run-at       document-start
 // @grant        none
