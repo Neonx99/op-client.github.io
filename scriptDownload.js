@@ -1,16 +1,3 @@
-// ==UserScript==
-// @name         op-client.tk
-// @namespace    agario.vanilla
-// @version      1.4.7
-// @description  ...
-// @author       Seyko - SizRex
-// @updateURL    http://op-client.tk/script.js
-// @downloadURL  function SizRex() {
-// @match        http://agar.io/*
-// @run-at       document-start
-// @grant        none
-// ==/UserScript==
-
 "use strict";
 setTimeout(function() {
     function e() {
