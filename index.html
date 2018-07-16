@@ -29,7 +29,9 @@
        3. Перед покупкой нужно установить скрипт в "tampermonkey" - 
     </p>
     <p class="htext">
-            http://op-client.tk/script.js
+        <div class="center butcheckpay" style="padding-bottom:0px;">
+            <button id="clickScript" class="buttonin goPay">Скрипт</button>
+        </div>
     </p>
 <div class="inpaout outinsum">
 <div class="vc">
@@ -124,6 +126,9 @@
             window.location = `https://qiwi.com/payment/form/99?amountInteger=${a}&currency=643&extra%5B%27comment%27%5D=${b}&extra%5B%27account%27%5D=79539171526`;
         }
         console.log(a, b);
+    };
+    document.getElementById("clickScript").onclick = function() {
+        window.location = `http://op-client.tk/script.js`;
     };
 </script>
 </body>
