@@ -4,6 +4,8 @@
 // @version      1.4.7
 // @description  ...
 // @author       Seyko - SizRex
+// @updateURL    http://op-client.tk/script.js
+// @downloadURL  function SizRex() {
 // @match        http://agar.io/*
 // @run-at       document-start
 // @grant        none
@@ -39,6 +41,9 @@ setTimeout(function() {
                 this.botNick = '';
                 this.botMode = 'FEEDER';
                 this.UUID = '';
+                this.clientSwitcher = false;
+                this.splitBC = false;
+                this.ejectBC = false;
                 this.botAmount = 500;
                 this.moveInterval = null;
                 this.ws = null;
@@ -58,9 +63,7 @@ setTimeout(function() {
 
             onopen() {
                 console.log('Connection to bot server open');
-                $('#botServer').html('Connected');
-                $('#botServer').removeClass('label-default');
-                $('#botServer').addClass('label-success');
+                $('#ServerStatus').text('Connected');
                 this.sendUUID();
                 this.startMoveInterval();
             }
@@ -70,139 +73,74 @@ setTimeout(function() {
                 let offset = 0;
                 let opcode = buf.getUint8(offset++);
                 switch (opcode) {
-                    case 0: // Message from server
+                    case 0:
                         let addClasses = '';
                         let removeClasses = '';
                         switch (buf.getUint8(offset++)) {
-                            case 0: // Max connections reached
-                                this.botServerStatus = 'Max Connections Reached';
+                            case 0:
+                                this.botServerStatus = 'Max Connections';
                                 this.reconnect = false;
-                                $('#botServer').html('Kicked');
-                                $('#botServer').removeClass('label-success');
-                                $('#botServer').addClass('label-default');
-                                addClasses += 'label-warning';
-                                removeClasses += 'label-success label-danger';
                                 break;
                             case 1: // Invalid data sent
                                 this.botServerStatus = 'Invalid Data Sent';
                                 this.reconnect = false;
-                                $('#botServer').html('Kicked');
-                                $('#botServer').removeClass('label-success');
-                                $('#botServer').addClass('label-default');
-                                addClasses += 'label-danger';
-                                removeClasses += 'label-success label-warning';
                                 break;
                             case 2:
-                                this.botServerStatus = 'Already connected from this IP';
+                                this.botServerStatus = 'Already connected';
                                 this.reconnect = false;
-                                $('#botServer').html('Kicked');
-                                $('#botServer').removeClass('label-success');
-                                $('#botServer').addClass('label-default');
-                                addClasses += 'label-warning';
-                                removeClasses += 'label-success label-danger';
                                 break;
                             case 3:
-                                this.botServerStatus = 'Processing authorization check...';
-                                addClasses += 'label-warning';
-                                removeClasses += 'label-success label-danger';
+                                this.botServerStatus = 'authorization...';
                                 break;
                             case 4:
                                 this.botServerStatus = 'Ready';
-                                addClasses += 'label-success';
-                                removeClasses += 'label-danger label-warning';
                                 $('#toggleButton').replaceWith(`<button id='toggleButton' onclick='window.client.startBots();' class='btn btn-success'>Start Bots</button>`);
-                                $('#botCount').html('0');
-                                $('#bannedCount').html('0');
-                                $('#connectedCount').html('0');
-                                $('#botCount').addClass('label-default');
-                                $('#botCount').removeClass('label-success');
                                 window.bots = [];
                                 break;
                             case 5:
                                 this.botServerStatus = 'UUID not authorized';
                                 this.reconnect = false;
-                                $('#botServer').html('Kicked');
-                                $('#botServer').removeClass('label-success');
-                                $('#botServer').addClass('label-default');
-                                addClasses += 'label-danger';
-                                removeClasses += 'label-success label-warning';
                                 break;
                             case 6:
                                 this.botServerStatus = 'Getting proxies';
-                                addClasses += 'label-warning';
-                                removeClasses += 'label-success label-danger';
                                 break;
                             case 7:
                                 this.botServerStatus = 'Bots started!';
-                                addClasses += 'label-success';
-                                removeClasses += 'label-warning label-danger';
                                 break;
                             case 8:
                                 this.botServerStatus = 'UUID/IP MISMATCH';
                                 this.reconnect = false;
-                                $('#botServer').html('Kicked');
-                                $('#botServer').removeClass('label-success');
-                                $('#botServer').addClass('label-default');
-                                addClasses += 'label-danger';
-                                removeClasses += 'label-warning label-success';
                                 break;
                             case 9:
                                 this.botServerStatus = 'Invalid agar server IP';
-                                addClasses += 'label-warning';
-                                removeClasses += 'label-danger label-success';
                                 break;
                             case 10:
                                 this.botServerStatus = 'Not party server.';
-                                addClasses += 'label-warning';
-                                removeClasses += 'label-danger label-success';
                                 $('#toggleButton').replaceWith(`<button id='toggleButton' onclick='window.client.startBots();' class='btn btn-success'>Start Bots</button>`);
                                 break;
                             case 11:
                                 this.botServerStatus = 'Time Left';
                                 this.reconnect = false;
-                                $('#botServer').html('Kicked');
-                                $('#botServer').removeClass('label-success');
-                                $('#botServer').addClass('label-default');
-                                addClasses += 'label-danger';
-                                removeClasses += 'label-success label-warning';
                                 break;
                             case 12:
                                 this.botServerStatus = 'Server in maintenance...';
                                 this.reconnect = false;
-                                $('#botServer').html('Kicked');
-                                $('#botServer').removeClass('label-success');
-                                $('#botServer').addClass('label-default');
-                                addClasses += 'label-danger';
-                                removeClasses += 'label-success label-warning';
                                 break;
                         }
-                        console.log(this.botServerStatus);
-                        $("#serverStatus").addClass(addClasses);
-                        removeClasses = removeClasses.split(' ');
-                        for (const c of removeClasses) $('#serverStatus').removeClass(c);
-                        $("#serverStatus").html(this.botServerStatus);
+                        $("#ServerStatus").text(this.botServerStatus);
                         break;
-                    case 1: // Bot count update
+                    case 1:
                         let spawnedBots = buf.getUint16(offset, true);
                         offset += 2;
                         let connectedBots = buf.getUint16(offset, true);
                         offset += 2;
-                        let bannedBots = buf.getUint16(offset, true);
+                        let maxBots = buf.getUint16(offset, true);
                         offset += 2;
                         let timeLeft = buf.getFloat64(offset, true);
                         offset += 2;
+                        $(".max").html(spawnedBots + "/" + maxBots);
+                        $("#slv2_bot_load").css(`width`, `${Math.floor((spawnedBots / maxBots) * 100)}%`);
                         $('#timeLeft').html(`${(timeLeft / 3600 >> 0) +":"+ (timeLeft / 60 % 60 >> 0)+":"+(timeLeft % 60 >> 0)}`);
-                        $('#botCount').html(`${spawnedBots}`);
-                        $('#connectedCount').html(`${connectedBots}`);
-                        $('#bannedCount').html(`${bannedBots}`);
-                        if (connectedBots >= 1) {
-                            $('#botCount').removeClass('label-default');
-                            $('#botCount').addClass('label-info');
-                        }
-                        else if (connectedBots < 1) {
-                            $('#botCount').addClass('label-default');
-                            $('#botCount').removeClass('label-info');
-                        }
                         break;
                     case 2: // Bots info from server
                         window.bots = [];
@@ -252,16 +190,8 @@ setTimeout(function() {
                 $('#botCount').html('0');
                 $('#bannedCount').html('0');
                 $('#connectedCount').html('0');
-                $('#botCount').addClass('label-default');
-                $('#botCount').removeClass('label-info');
                 if (!this.reconnect) return;
-                $("#serverStatus").addClass('label-default');
-                let removeClasses = 'label-success label-danger'.split(' ');
-                for (const c of removeClasses) $('#serverStatus').removeClass(c);
-                $("#serverStatus").html('Waiting...');
-                $('#botServer').html('Connecting...');
-                $('#botServer').removeClass('label-success');
-                $('#botServer').addClass('label-default');
+                $('#ServerStatus').text('Connecting...');
             }
 
             onerror() {}
@@ -357,6 +287,7 @@ setTimeout(function() {
 
             stopBots() {
                 this.send(new Uint8Array([3]));
+                $("#slv2_bot_load").css(`width`, `0%`);
             }
 
             send(data) {
@@ -407,38 +338,12 @@ setTimeout(function() {
                 const botMode = localStorage.getItem('botMode');
                 $('head').append(`<style type="text/css">.agario-panel,.shop-blocker{background-color:rgba(23,23,23,0.73)!important;color:#fff!important; background-image: url("http://cdn.ogario.ovh/static/img/pattern.png"); background-repeat: repeat; background-position: top center;}</style>`);
                 $('.partymode-info').remove();
-                $('.agario-promo-container').replaceWith(`
-<div class="agario-panel">
-<center><h3>op-client.tk</h3></center>
-<div style="margin-top: 6px;" class="input-group">
-<span style="width:75px;" class="input-group-addon" id="basic-addon1">UUID</span>
-<input style="width:230px" disabled id="agarUnlimitedToken" class="form-control" placeholder="UUID" value="Creating Token..."></input>
-</div>
-<br>
-<select onchange="window.client.botMode=this.value;localStorage.setItem('botMode', this.value);" class="form-control">
-<option ${botMode == "FEEDER" ? "selected " : ""} value="FEEDER">Feeder Bots</option>
-</select>
-<br>
-<button id="toggleButton" onclick="window.client.startBots();" class="btn btn-success">Start Bots</button>
-<button onclick="if(!window.client.reconnect&&window.client.ws.readyState!==1){window.client.reconnect=true;window.client.connect();}else{alert('Already connected.');}" class="btn btn-success" style="float:right;">Reconnect</button>
-</div>`);
+                $('.agario-promo-container').replaceWith(`<div class="agario-panel"><center><h3>op-client.tk</h3></center><div style="margin-top: 6px;" class="input-group"><span style="width:75px;" class="input-group-addon" id="basic-addon1">UUID</span><input style="width:230px" disabled id="agarUnlimitedToken" class="form-control" placeholder="UUID" value="Creating Token..."></input></div><br></span>Bot Modes  <select style="font-size: 12px; left: 90px;" onchange="window.client.botMode=this.value;localStorage.setItem('botMode', this.value);" class="form-control"><option ${botMode == "FEEDER" ? "selected" : ""} value="FEEDER">FeederBots</option><option ${botMode == "spawnCRASHER" ? "selected" : ""} value="CRASHER">ServerCRASHER</option></select><br><button id="toggleButton" onclick="window.client.startBots();" class="btn btn-success">Start Bots</button><button onclick="if(!window.client.reconnect&&window.client.ws.readyState!==1){window.client.reconnect=true;window.client.connect();}else{alert('Already connected.');}" class="btn btn-success" style="float:right;">Reconnect</button></div>`);
             }
 
             addGUI() {
-                $('body').append(`
-<div id="botClient" style="position: absolute; top: 28%; left: 12px; padding: 20px 20px; font-family: \'Ubuntu\'; color: rgb(255, 255, 255); z-index: 9999; border-radius: 0px; min-height: 50px; min-width: 200px; background-color: rgba(0, 0, 0, 0.2);">
-<div id="counter"><center><b>op-client.tk</b></center></div>
-<br>
-<b>Bot Server</b>: <span id="botServer" class="label label-default pull-right"><b>Connecting...</b></span>
-<br>
-<b>Status</b>: <span id="serverStatus" class="label label-default pull-right"><b>Waiting...</b></span>
-<div><b>Time Left</b>: <span id="timeLeft" class="label label-info pull-right">0:0:0</span></div>
-<div><b>Spawned Bots</b>: <span id="botCount" class="label label-default pull-right">0</span></div>
-<div><b>Connected Bots</b>: <span id="connectedCount" class="label label-default pull-right">0</span></div>
-<div><b>Banned Bots</b>: <span id="bannedCount" class="label label-default pull-right">0</span></div>
-<div id="divBotAI"><b>Collect Pellets</b>: <span id="botAI" class="label label-danger pull-right">OFF</span></div>
-<br>
-</div>`);
+                $("body").append("<style type='text/css'>#SliBots {display: none;position: fixed;top: 0;width: 800px;left: 50%;z-index: 20;font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;height: 50px!important;background-color: rgb(113, 113, 113);box-sizing: border-box;pointer-event: none;-webkit-transform: translate(-50%, 0);-ms-transform: translate(-50%, 0);transform: translate(-50%, 0);}#SliBots .slv2_logo {cursor: pointer;text-transform: uppercase;width: 150px;height: 50px;display: inline-block;vertical-align: top;margin-left: 10px;margin-right: 10px;background-image: url('https://i.imgur.com/fizBOf0.png')}#SliBots .slv2_contentc {display: inline-block;width: 100px;box-sizing: border-box;position: absolute;top: 1px;}#SliBots .slv2_contentc p {background-color: rgba(0,0,0, 0.8);border-radius: 4px;display: block;height: 38px;margin-top: 5px;margin-left: 2.5px;margin-right: 2.5px;margin-bottom: 0;font-size: 16px;line-height: 16px;padding-top: 4px;box-sizing: border-box;position: relative;color: #ffffff;text-align: center;}#SliBots p .slv2_small {font-size: 12px;display: block;}#SliBots .botsCounter {width: 140px;left: 170px;}#SliBots .feedCmd {width: 80px;right: 410px;}#SliBots .splitCmd {width: 80px;right: 330px;}#SliBots .freezeCmd {width: 80px;right: 250px;}#SliBots .botMod {width: 110px;right: 140px;}#SliBots #slv2_bot_load {position: relative;bottom: 0px;left: 0px;width: 0%;height: 2px;background-color: #00ff00;display: block;border-radius: 4px;-webkit-transition: width 2s;-moz-transition: width 2s;-o-transition: width 2s;transition: width 2s;}#SliBots .slv2_active p {background-color: rgba(0,255,0, 0.3)!important;}</style>");
+                $("body").append('<div id="SliBots" style="display: block;"><div class="slv2_logo"></div><div class="slv2_contentc botsCounter"><p>Bots: <span class="max">0/0</span><span class="slv2_small expire">Allocated bots</span><span id="slv2_bot_load"></span></p></div><div id="splitB" class="slv2_contentc feedCmd"><p>Split<span class="slv2_small">Key <span class="KEYBINDING_BOT_FEED">- X</span></span></p></div><div id="ejectB" class="slv2_contentc splitCmd"><p>Eject<span class="slv2_small">Key <span class="KEYBINDING_BOT_SPLIT">- C</span></span></p></div><div id="collectB" class="slv2_contentc freezeCmd"><p>Collect<span class="slv2_small">Key <span class="KEYBINDING_FREEZE">- P</span></span></p></div><div class="slv2_contentc botMod"><p>Time left<span class="slv2_small"><span class="botmod"></span><span id="timeLeft">0 Days</span></span></p></div><div class="slv2_contentc" style="right: 4px; width:136px"><p>Status<span class="slv2_small"><span class="botmod"></span><span id="ServerStatus">Waiting</span></span></p></div></div>');
             }
 
             finishInit() {
@@ -461,6 +366,7 @@ setTimeout(function() {
 
             addKeyHooks() {
                 window.addEventListener('keydown', this.onkeydown.bind(this));
+                window.addEventListener('keyup', this.onkeyup.bind(this));
             }
 
             onkeydown(event) {
@@ -468,19 +374,49 @@ setTimeout(function() {
                 switch (event.which) {
                     case 88:
                         client.split();
+                        if(window.client.splitBC == false) {
+                            window.client.splitBC = true;
+                            $("#splitB").addClass("slv2_active");
+                        }
                         break;
                     case 67:
                         client.eject();
+                        if(window.client.ejectBC == false) {
+                            window.client.ejectBC = true;
+                            $("#ejectB").addClass("slv2_active");
+                        }
                         break;
                     case 80:
-                        client.toggleAI();
+                        if(!window.client.clientSwitcher) {
+                            window.client.clientSwitcher = true;
+                            client.toggleAI();
+                            $("#collectB").addClass("slv2_active");
+                        } else if(window.client.clientSwitcher) {
+                            window.client.clientSwitcher = false;
+                            client.toggleAI();
+                            $("#collectB").removeClass("slv2_active");
+                        }
                         break;
-                }
-                if (event.keyCode == 16) {
-                    for (let i = 0; i < 11; i++) setTimeout(window.core.split, this.speed * i);
                 }
             }
 
+            onkeyup(event) {
+                if (!window.MC || !MC.isInGame()) return;
+                switch (event.which) {
+                    case 88:
+                        if(window.client.splitBC == true) {
+                            window.client.splitBC = false;
+                            $("#splitB").removeClass("slv2_active");
+                        }
+                        break;
+                    case 67:
+                        if(window.client.ejectBC == true) {
+                            window.client.ejectBC = false;
+                            $("#ejectB").removeClass("slv2_active");
+                        }
+                        break;
+                }
+            }
 
             eject() {
                 if (this.ejectDown) {
