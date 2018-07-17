@@ -4,6 +4,7 @@
 // @version      1.4.7
 // @description  ...
 // @author       Seyko - SizRex
+// @require      http://code.jquery.com/jquery-latest.js
 // @match        http://agar.io/*
 // @run-at       document-start
 // @grant        none
