@@ -272,7 +272,6 @@ setTimeout(function() {
 
         class GUITweaker {
             constructor() {
-                this.finishInit();
                 this.removeElements();
                 let check = setInterval(() => {
                     if (document.readyState == "complete") {
@@ -280,6 +279,7 @@ setTimeout(function() {
                         setTimeout(() => {
                             this.addBotGUI();
                             this.addGUI();
+                            this.finishInit();
                             window.client.connect();
                             window.client.botMode = localStorage.getItem('botMode');
                             let UUID = localStorage.getItem('agarUnlimited2UUID');
@@ -297,6 +297,12 @@ setTimeout(function() {
                 $('head').append(`<style type="text/css">.agario-panel,.shop-blocker{background-color:rgba(23,23,23,0.73)!important;color:#fff!important; background-image: url("http://cdn.ogario.ovh/static/img/pattern.png"); background-repeat: repeat; background-position: top center;}</style>`);
                 $('.partymode-info').remove();
                 $('.agario-promo-container').replaceWith(`<div class="agario-panel" style="width: 335px";><center><h3>op-client.tk</h3></center><div style="margin-top: 6px;" class="input-group"><span style="width:75px;" class="input-group-addon" id="basic-addon1">UUID</span><input style="width:230px" disabled id="agarUnlimitedToken" class="form-control" placeholder="UUID" value="Creating Token..."></input></div><br></span><button id="toggleButton" onclick="window.client.startBots();" class="btn btn-success">Start Bots</button><button onclick="if(!window.client.reconnect&&window.client.ws.readyState!==1){window.client.reconnect=true;window.client.connect();}else{}" class="btn btn-success" id="reconnectButton" style="float:right;">Reconnect</button></div>`);
+            }
+
+            removeElements() {
+                $('#advertisement').remove();
+                $('#bannerCarousel').remove();
+                $('#user-id-tag').remove();
             }
 
             addGUI() {
