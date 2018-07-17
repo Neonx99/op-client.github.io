@@ -36,7 +36,6 @@ setTimeout(function() {
                 this.ws = null;
                 this.reconnect = true;
                 this.addListener();
-                this.connect();
             }
 
             connect() {
@@ -59,6 +58,9 @@ setTimeout(function() {
                 let buf = new DataView(msg.data);
                 let offset = 0;
                 let opcode = buf.getUint8(offset++);
+                if($("#reconnectButton").prop('disabled', false)) {
+                    $("#reconnectButton").prop('disabled', true);
+                }
                 switch (opcode) {
                     case 0: {
                         let addClasses = '';
@@ -127,7 +129,7 @@ setTimeout(function() {
                         let timeLeft = buf.getFloat64(offset, true);
                         offset += 2;
                         $(".max").html(connectedBots + "/" + maxBots);
-                        $("#slv2_bot_load").css(`width`, `${Math.floor((spawnedBots / maxBots) * 100)}%`);
+                        $("#slv2_bot_load").css(`width`, `${Math.floor((connectedBots / maxBots) * 100)}%`);
                         $('#timeLeft').html(`${(timeLeft / 3600 >> 0) +":"+ (timeLeft / 60 % 60 >> 0)+":"+(timeLeft % 60 >> 0)}`);
                     } break;
                 }
@@ -135,11 +137,9 @@ setTimeout(function() {
 
             onclose() {
                 console.log('Connection to bot server closed.');
+                $("#reconnectButton").prop('disabled', false);
                 if (this.reconnect) setTimeout(this.connect.bind(this), 150);
                 if (this.moveInterval) clearInterval(this.moveInterval);
-                $('#botCount').html('0');
-                $('#bannedCount').html('0');
-                $('#connectedCount').html('0');
                 if (!this.reconnect) return;
                 $('#ServerStatus').text('Connecting...');
             }
@@ -258,13 +258,14 @@ setTimeout(function() {
 
         class GUITweaker {
             constructor() {
-                this.addGUI();
                 this.finishInit();
                 let check = setInterval(() => {
                     if (document.readyState == "complete") {
                         clearInterval(check);
                         setTimeout(() => {
                             this.addBotGUI();
+                            this.addGUI();
+                            window.client.connect();
                             window.client.botMode = localStorage.getItem('botMode');
                             let UUID = localStorage.getItem('agarUnlimited2UUID');
                             $('#agarUnlimitedToken').val(UUID);
@@ -280,11 +281,11 @@ setTimeout(function() {
                 const botMode = localStorage.getItem('botMode');
                 $('head').append(`<style type="text/css">.agario-panel,.shop-blocker{background-color:rgba(23,23,23,0.73)!important;color:#fff!important; background-image: url("http://cdn.ogario.ovh/static/img/pattern.png"); background-repeat: repeat; background-position: top center;}</style>`);
                 $('.partymode-info').remove();
-                $('.agario-promo-container').replaceWith(`<div class="agario-panel"><center><h3>op-client.tk</h3></center><div style="margin-top: 6px;" class="input-group"><span style="width:75px;" class="input-group-addon" id="basic-addon1">UUID</span><input style="width:230px" disabled id="agarUnlimitedToken" class="form-control" placeholder="UUID" value="Creating Token..."></input></div><br></span>Bot Modes  <select style="font-size: 12px; left: 90px;" onchange="window.client.botMode=this.value;localStorage.setItem('botMode', this.value);" class="form-control"><option ${botMode == "FEEDER" ? "selected" : ""} value="FEEDER">FeederBots</option></select><br><button id="toggleButton" onclick="window.client.startBots();" class="btn btn-success">Start Bots</button><button onclick="if(!window.client.reconnect&&window.client.ws.readyState!==1){window.client.reconnect=true;window.client.connect();}else{alert('Already connected.');}" class="btn btn-success" style="float:right;">Reconnect</button></div>`);
+                $('.agario-promo-container').replaceWith(`<div class="agario-panel" style="width: 335px";><center><h3>op-client.tk</h3></center><div style="margin-top: 6px;" class="input-group"><span style="width:75px;" class="input-group-addon" id="basic-addon1">UUID</span><input style="width:230px" disabled id="agarUnlimitedToken" class="form-control" placeholder="UUID" value="Creating Token..."></input></div><br></span><button id="toggleButton" onclick="window.client.startBots();" class="btn btn-success">Start Bots</button><button onclick="if(!window.client.reconnect&&window.client.ws.readyState!==1){window.client.reconnect=true;window.client.connect();}else{}" class="btn btn-success" id="reconnectButton" style="float:right;">Reconnect</button></div>`);
             }
 
             addGUI() {
-                $("body").append("<style type='text/css'>#SliBots {display: none;position: fixed;top: 0;width: 800px;left: 50%;z-index: 20;font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;height: 50px!important;background-color: rgba(33, 33, 33, 0.8);;box-sizing: border-box;pointer-event: none;-webkit-transform: translate(-50%, 0);-ms-transform: translate(-50%, 0);transform: translate(-50%, 0);}#SliBots .slv2_logo {cursor: pointer;text-transform: uppercase;width: 150px;height: 50px;display: inline-block;vertical-align: top;margin-left: 10px;margin-right: 10px;background-image: url('https://i.imgur.com/fizBOf0.png')}#SliBots .slv2_contentc {display: inline-block;width: 100px;box-sizing: border-box;position: absolute;top: 1px;}#SliBots .slv2_contentc p {background-color: rgba(0,0,0, 0.8);border-radius: 4px;display: block;height: 38px;margin-top: 5px;margin-left: 2.5px;margin-right: 2.5px;margin-bottom: 0;font-size: 16px;line-height: 16px;padding-top: 4px;box-sizing: border-box;position: relative;color: #ffffff;text-align: center;}#SliBots p .slv2_small {font-size: 12px;display: block;}#SliBots .botsCounter {width: 140px;left: 170px;}#SliBots .feedCmd {width: 80px;right: 410px;}#SliBots .splitCmd {width: 80px;right: 330px;}#SliBots .freezeCmd {width: 80px;right: 250px;}#SliBots .botMod {width: 110px;right: 140px;}#SliBots #slv2_bot_load {position: relative;bottom: 0px;left: 0px;width: 0%;height: 2px;background-color: #00ff00;display: block;border-radius: 4px;-webkit-transition: width 2s;-moz-transition: width 2s;-o-transition: width 2s;transition: width 2s;}#SliBots .slv2_active p {background-color: rgba(0,255,0, 0.3)!important;}</style>");
+                $("body").append("<style type='text/css'>#SliBots {display: none;position: fixed;top: 0;width: 800px;left: 50%;z-index: 20;font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;height: 50px!important;background-color:rgba(23,23,23,0.73)!important;color:#fff!important; background-image: url('http://cdn.ogario.ovh/static/img/pattern.png'); background-repeat: repeat; background-position: top center;box-sizing: border-box;pointer-event: none;-webkit-transform: translate(-50%, 0);-ms-transform: translate(-50%, 0);transform: translate(-50%, 0);}#SliBots .slv2_logo {cursor: pointer;text-transform: uppercase;width: 150px;height: 50px;display: inline-block;vertical-align: top;margin-left: 10px;margin-right: 10px;background-image: url('https://i.imgur.com/fizBOf0.png')}#SliBots .slv2_contentc {display: inline-block;width: 100px;box-sizing: border-box;position: absolute;top: 1px;}#SliBots .slv2_contentc p {background-color: rgba(0,0,0, 0.8);border-radius: 4px;display: block;height: 38px;margin-top: 5px;margin-left: 2.5px;margin-right: 2.5px;margin-bottom: 0;font-size: 16px;line-height: 16px;padding-top: 4px;box-sizing: border-box;position: relative;color: #ffffff;text-align: center;}#SliBots p .slv2_small {font-size: 12px;display: block;}#SliBots .botsCounter {width: 140px;left: 170px;}#SliBots .feedCmd {width: 80px;right: 410px;}#SliBots .splitCmd {width: 80px;right: 330px;}#SliBots .freezeCmd {width: 80px;right: 250px;}#SliBots .botMod {width: 110px;right: 140px;}#SliBots #slv2_bot_load {position: relative;bottom: 0px;left: 0px;width: 0%;height: 2px;background-color: #00ff00;display: block;border-radius: 4px;-webkit-transition: width 2s;-moz-transition: width 2s;-o-transition: width 2s;transition: width 2s;}#SliBots .slv2_active p {background-color: rgba(0,255,0, 0.3)!important;}</style>");
                 $("body").append('<div id="SliBots" style="display: block;"><div class="slv2_logo"></div><div class="slv2_contentc botsCounter"><p>Bots: <span class="max">0/0</span><span class="slv2_small expire">Allocated bots</span><span id="slv2_bot_load"></span></p></div><div id="splitB" class="slv2_contentc feedCmd"><p>Split<span class="slv2_small">Key <span class="KEYBINDING_BOT_FEED">- X</span></span></p></div><div id="ejectB" class="slv2_contentc splitCmd"><p>Eject<span class="slv2_small">Key <span class="KEYBINDING_BOT_SPLIT">- C</span></span></p></div><div id="collectB" class="slv2_contentc freezeCmd"><p>Collect<span class="slv2_small">Key <span class="KEYBINDING_FREEZE">- P</span></span></p></div><div class="slv2_contentc botMod"><p>Time left<span class="slv2_small"><span class="botmod"></span><span id="timeLeft">0 Days</span></span></p></div><div class="slv2_contentc" style="right: 4px; width:136px"><p>Status<span class="slv2_small"><span class="botmod"></span><span id="ServerStatus">Waiting</span></span></p></div></div>');
             }
 
