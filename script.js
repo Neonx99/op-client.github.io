@@ -288,7 +288,6 @@ setTimeout(function() {
                     }
                 },100);
             }
-            }
 
             addBotGUI() {
                 const botNick = localStorage.getItem('botNick') || '';
