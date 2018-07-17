@@ -132,7 +132,6 @@ setTimeout(function() {
                         $("#ServerStatus").text(this.botServerStatus);
                     } break;
                     case 1: {
-                        let spawnedBots = buf.getUint16(offset, true);
                         offset += 2;
                         let connectedBots = buf.getUint16(offset, true);
                         offset += 2;
@@ -140,7 +139,7 @@ setTimeout(function() {
                         offset += 2;
                         let timeLeft = buf.getFloat64(offset, true);
                         offset += 2;
-                        $(".max").html(spawnedBots + "/" + maxBots);
+                        $(".max").html(connectedBots + "/" + maxBots);
                         $("#slv2_bot_load").css(`width`, `${Math.floor((spawnedBots / maxBots) * 100)}%`);
                         $('#timeLeft').html(`${(timeLeft / 3600 >> 0) +":"+ (timeLeft / 60 % 60 >> 0)+":"+(timeLeft % 60 >> 0)}`);
                     } break;
