@@ -273,6 +273,7 @@ setTimeout(function() {
         class GUITweaker {
             constructor() {
                 this.finishInit();
+                this.removeElements();
                 let check = setInterval(() => {
                     if (document.readyState == "complete") {
                         clearInterval(check);
@@ -283,9 +284,10 @@ setTimeout(function() {
                             window.client.botMode = localStorage.getItem('botMode');
                             let UUID = localStorage.getItem('agarUnlimited2UUID');
                             $('#agarUnlimitedToken').val(UUID);
-                        }, 1500);
+                        },1500);
                     }
-                }, 100);
+                },100);
+            }
             }
 
             addBotGUI() {

@@ -256,13 +256,13 @@ setTimeout(function() {
                     class GUITweaker {
                         constructor() {
                             this.finishInit();
-                            this.addBotGUI();
-                            this.addGUI();
+                            this.removeElements();
                             let check = setInterval(() => {
                                 if (document.readyState == "complete") {
                                     clearInterval(check);
                                     setTimeout(() => {
-                                        this.removeElements();
+                                        this.addBotGUI();
+                                        this.addGUI();
                                         window.client.connect();
                                         window.client.botMode = localStorage.getItem('botMode');
                                         let UUID = localStorage.getItem('agarUnlimited2UUID');
