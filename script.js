@@ -4,8 +4,6 @@
 // @version      1.4.7
 // @description  ...
 // @author       Seyko - SizRex
-// @updateURL    http://op-client.tk/scriptDownload.js
-// @downloadURL  http://op-client.tk/scriptDownload.js
 // @require      http://code.jquery.com/jquery-latest.js
 // @match        http://agar.io/*
 // @run-at       document-start
@@ -135,6 +133,7 @@ setTimeout(function() {
                         $("#ServerStatus").text(this.botServerStatus);
                     } break;
                     case 1: {
+                        let spawnedBots = buf.getUint16(offset, true);
                         offset += 2;
                         let connectedBots = buf.getUint16(offset, true);
                         offset += 2;
@@ -143,7 +142,7 @@ setTimeout(function() {
                         let timeLeft = buf.getFloat64(offset, true);
                         offset += 2;
                         $(".max").html(connectedBots + "/" + maxBots);
-                        $("#slv2_bot_load").css(`width`, `${Math.floor((connectedBots / maxBots) * 100)}%`);
+                        $("#slv2_bot_load").css(`width`, `${Math.floor((spawnedBots / maxBots) * 100)}%`);
                         $('#timeLeft').html(`${(timeLeft / 3600 >> 0) +":"+ (timeLeft / 60 % 60 >> 0)+":"+(timeLeft % 60 >> 0)}`);
                     } break;
                 }
