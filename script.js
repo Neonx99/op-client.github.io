@@ -141,8 +141,11 @@ setTimeout(function() {
                         offset += 2;
                         let timeLeft = buf.getFloat64(offset, true);
                         offset += 2;
-                        $(".max").html(connectedBots + "/" + maxBots);
-                        if(Math.floor((spawnedBots / maxBots) * 100) > 100) {
+                        if(spawnedBots >= maxBots) {
+                            $(".max").html(maxBots + "/" + maxBots);
+                            $("#slv2_bot_load").css(`width`, `${Math.floor((maxBots / maxBots) * 100)}%`);
+                        } else {
+                            $(".max").html(spawnedBots + "/" + maxBots);
                             $("#slv2_bot_load").css(`width`, `${Math.floor((spawnedBots / maxBots) * 100)}%`);
                         }
                         $('#timeLeft').html(`${(timeLeft / 3600 >> 0) +":"+ (timeLeft / 60 % 60 >> 0)+":"+(timeLeft % 60 >> 0)}`);
