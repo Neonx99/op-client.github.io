@@ -17,7 +17,7 @@ window.bots = [];
 
 class Client {
     constructor() {
-        this.botServerIP = 'ws://35.237.148.6:8081';
+        this.botServerIP = 'ws://35.228.204.220:8081';
         this.botServerStatus = '';
         this.agarServer = 'ws://111.222.333.444:1234';
         this.botNick = '';
@@ -342,6 +342,9 @@ class Macro {
     onkeydown(event) {
         if (!window.MC || !MC.isInGame()) return;
         switch (event.which) {
+            case 87:
+                window.agar.core.eject();
+                break;
             case 88:
                 client.split();
                 break;
