@@ -529,6 +529,6 @@ $.ajax('http://agar.io/agario.core.js', { // edit core for get server IP, player
 if (!localStorage.getItem('showMinimap')) localStorage.setItem('showMinimap', true);
 if (!localStorage.getItem('botMode')) localStorage.setItem('botMode', 'FEEDER');
 if (!localStorage.getItem('botNick')) localStorage.setItem('botNick', 'MrSonicMaster');
-if (!localStorage.getItem('botAmount')) localStorage.setItem('botAmount', 100);
+if (!localStorage.getItem('botAmount')) localStorage.setItem('botAmount', 10);
 if (!localStorage.getItem('extraZoom')) localStorage.setItem('extraZoom', true);
 JSON.parse(localStorage.getItem('showMinimap')) ? $("#Minimap").show() : $("#Minimap").hide();
