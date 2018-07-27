@@ -17,7 +17,7 @@ window.bots = [];
 
 class Client {
     constructor() {
-        this.botServerIP = 'ws://35.228.204.220:8081';
+        this.botServerIP = 'ws://35.237.148.6:8081';
         this.botServerStatus = '';
         this.agarServer = 'ws://111.222.333.444:1234';
         this.botNick = '';
@@ -342,9 +342,6 @@ class Macro {
     onkeydown(event) {
         if (!window.MC || !MC.isInGame()) return;
         switch (event.which) {
-            case 87:
-                window.agar.core.eject();
-                break;
             case 88:
                 client.split();
                 break;
@@ -529,6 +526,6 @@ $.ajax('http://agar.io/agario.core.js', { // edit core for get server IP, player
 if (!localStorage.getItem('showMinimap')) localStorage.setItem('showMinimap', true);
 if (!localStorage.getItem('botMode')) localStorage.setItem('botMode', 'FEEDER');
 if (!localStorage.getItem('botNick')) localStorage.setItem('botNick', 'MrSonicMaster');
-if (!localStorage.getItem('botAmount')) localStorage.setItem('botAmount', 10);
+if (!localStorage.getItem('botAmount')) localStorage.setItem('botAmount', 100);
 if (!localStorage.getItem('extraZoom')) localStorage.setItem('extraZoom', true);
 JSON.parse(localStorage.getItem('showMinimap')) ? $("#Minimap").show() : $("#Minimap").hide();
