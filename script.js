@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         Agar Bots V3
-// @namespace    https://www.NeyBots.ga/
+// @name         op-client.tk agar.io
+// @namespace    https://op-client.tk/
 // @version      8V
 // @description  Agar.io bots after patch.
 // @author       SizRex
@@ -17,7 +17,7 @@ window.bots = [];
 
 class Client {
     constructor() {
-        this.botServerIP = 'ws://35.237.148.6:8081';
+        this.botServerIP = 'ws://35.228.204.220:8081';
         this.botServerStatus = '';
         this.agarServer = 'ws://111.222.333.444:1234';
         this.botNick = '';
