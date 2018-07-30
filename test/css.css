@@ -34,6 +34,7 @@ img {
 }
 .cont-a {
   max-width: 800px;
+  min-width: 500px;
   width: 95%;
   border: 3px solid #fff;
   border-radius: 3px;
@@ -79,8 +80,14 @@ a, abbr, acronym, address, applet, big, blockquote, body, caption, cite, code, d
   border: 3px solid #ffb400;
   box-shadow: 0 0 5px 1px #cbcbcb;
 }
+.inl {
+  display: inline-block;
+}
 .y1 {
-  background: url(https://i.imgur.com/50Bulsl.png) center no-repeat;
+  background: url(http://op-client.tk/plans/qiwi.png) center no-repeat;
+}
+.y2 {
+  background: url(http://op-client.tk/plans/paypal.png) center no-repeat;
 }
 .htoptext {
   font-size: 16px;
