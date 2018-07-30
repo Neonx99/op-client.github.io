@@ -30,5 +30,5 @@ body {
   }
   .card:hover {
     cursor: pointer;
-    transform: translateZ(10px);
+    transform: translateZ(20px);
   }
