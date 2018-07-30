@@ -1,34 +1,150 @@
 body {
     margin: 0;
     background-color: #3d385a;
-  }
-  .section  {
-    perspective: 1000px;
-  }
-  .container {
-    width: 680px;
-    margin: auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    transition: 1s;
-    transform: rotateX(10deg);
-    transform-style: preserve-3d;
-  }
-  .container-origin {
-    transform: rotate(0);
-  }
-  img {
-    max-width: 100%;
-  }
-  .card {
-    width: 200px;
-    margin: 10px;
-    transition: 0.3s;
-  }
-  .card:hover {
-    cursor: pointer;
-    transform: translateZ(20px);
-  }
+}
+.section  {
+  perspective: 1000px;
+}
+.container {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  transition: 1s;
+  transform: rotateX(10deg);
+  transform-style: preserve-3d;
+}
+.container-origin {
+  transform: rotate(0);
+}
+img {
+  max-width: 100%;
+}
+.card {
+  width: 200px;
+  margin: 10px;
+  transition: 0.3s;
+}
+.card:hover {
+  cursor: pointer;
+  transform: translateZ(20px);
+}
+.cont-a {
+  max-width: 800px;
+  width: 95%;
+  border: 3px solid #fff;
+  border-radius: 3px;
+  margin: 30px auto;
+  box-shadow: 0 0 5px 1px #cbcbcb;
+}
+.incont {
+  padding: 20px 30px;
+}
+.cho-pay {
+  position: relative;
+  margin: 30px 0;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 15px;
+}
+a, abbr, acronym, address, applet, big, blockquote, body, caption, cite, code, dd, del, dfn, div, dl, dt, em, fieldset, font, form, h1, h2, h3, h4, h5, h6, html, iframe, img, ins, kbd, label, legend, li, object, ol, pre, q, s, samp, small, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, tr, tt, ul, var {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  vertical-align: top;
+  font-family: Roboto,sans-serif;
+  color: inherit;
+}
+.cho-pay .inl {
+  width: 160px;
+  height: 80px;
+  background-color: #fff;
+  cursor: pointer;
+  border: 3px solid transparent;
+  margin: 0 3px;
+  border-radius: 3px;
+  margin-bottom: 6px;
+}
+.cho-pay .inl.act {
+  border: 3px solid #ffb400;
+  box-shadow: 0 0 5px 1px #cbcbcb;
+}
+.y1 {
+  background: url(https://i.imgur.com/50Bulsl.png) center no-repeat;
+}
+.htoptext {
+  font-size: 16px;
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  padding-bottom: 15px;
+  text-transform: uppercase;
+}
+p {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto,sans-serif;
+}
+.htext {
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  padding-bottom: 15px;
+}
+.butcheckpay {
+  padding-bottom: 30px;
+}
+.buttonin {
+  font-size: 16px;
+  color: #2a2a2a;
+  padding: 9px 35px;
+  border-radius: 5px;
+  background: #f7b821;
+  border-bottom: 2px solid #c08b0b;
+  transition: .3s;
+  cursor: pointer;
+  display: block;
+  border-top: 0;
+  margin: 0 auto;
+  border-left: 0;
+  border-right: 0;
+  margin-bottom: 15px;
+}
+.outinsum .vc {
+  margin: 20px auto;
+}
+
+.inpaout .vc {
+  width: 42%;
+}
+.posrev {
+  position: relative;
+}
+.inpaout input {
+  border: 2px solid #e7e7e7;
+  background: #fff;
+  font-size: 14px;
+  color: #616d76;
+  padding: 9px 2%;
+  width: 94%!important;
+  border-radius: 2px;
+  outline: 0;
+  display: block;
+  margin-bottom: 10px;
+}
+.clear {
+  clear: both;
+}
+.center {
+  text-align: center;
+}
