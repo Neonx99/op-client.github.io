@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="og:title" content="Купить agar.io ботов по оптимальным ценам!" />
+<meta name="og:description" content="" />
+<meta name="og:image" content="" />
+<meta name="og:type" content="article" />
+<meta name="og:url" content="http://op-client.tk/" />
+<link rel="stylesheet" type="text/css" href="./css.css">
+</head>
+<body>
+<div class="center">
+<h3>Купить ботов</h3>
+<div class="unrd-h"></div>
+<div class="cont-a">
+<div class="incont">
+<div class="cho-pay">
+<div class="inl y1 act" data-id="qiwi"></div>
+</div>
+<div class="info">
+<p class="htoptext">
+    1.  ТАРИФЫ - 1 РУБЛЬ = 20 МОНЕТ (Минимум 25 рублей или платеж не будет засчитан!)
+</p>
+<p class="htoptext">
+    2. По вопросам - vk.com/anatoliypro
+</p>
+<p class="htoptext">
+       3. Перед покупкой нужно установить скрипт в "tampermonkey" - 
+    </p>
+    <p class="htext">
+        <div class="center butcheckpay" style="padding-bottom:0px;">
+            <button id="clickScript" class="buttonin goPay">Скрипт</button>
+        </div>
+    </p>
+<div class="inpaout outinsum">
+<div class="vc">
+<p class="htext">
+<center>Сумма оплаты:</center>
+</p>
+<div class="posrev">
+<input type="text" id="sum" class="paySumma" placeholder="Сумма оплаты">
+<input type="text" id="uuid" class="paySumma" placeholder="Ваш UUID">
+<div></div>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+</div>
+<div class="center butcheckpay" style="padding-bottom:0px;">
+<button id="startpay" class="buttonin goPay">Перейти на страницу оплаты</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+    document.getElementById("startpay").onclick = function() {
+        var a = document.getElementById("sum").value;
+        var b = document.getElementById("uuid").value;
+        var c1 = false;
+        if(a >= 25 && b.length == 23) {
+            window.location = `https://qiwi.com/payment/form/99?amountInteger=${a}&currency=643&extra%5B%27comment%27%5D=${b}&extra%5B%27account%27%5D=79539171526`;
+        }
+        console.log(a, b);
+    };
+    document.getElementById("clickScript").onclick = function() {
+        window.location = `http://op-client.tk/script.js`;
+    };
+</script>
+</body>
+</html>
