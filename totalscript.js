@@ -186,10 +186,8 @@ if(window.location.origin == "http://agar.io") {
 
                 startMoveInterval() {
                     this.moveInterval = setInterval(() => {
-                        let pos = window.getMousePos();
-                        this.sendPos(pos.x, pos.y);
                         //this.sendPos(window.playerX, window.playerY);
-                        //if (window.playerX && window.playerX && window.coordOffsetFixed && this.clientX && this.clientY) this.sendPos(((this.clientX - window.innerWidth / 2) / window.viewScale) + window.playerX, ((this.clientY - window.innerHeight / 2) / window.viewScale) + window.playerY);
+                        if (window.playerX && window.playerX && window.coordOffsetFixed && this.clientX && this.clientY) this.sendPos(((this.clientX - window.innerWidth / 2) / window.viewScale) + window.playerX, ((this.clientY - window.innerHeight / 2) / window.viewScale) + window.playerY);
                     }, 100);
                 }
 
@@ -210,10 +208,10 @@ if(window.location.origin == "http://agar.io") {
 
                 startBots() {
                     this.sendBotMode();
-                    let buf = this.createBuffer(6 + window.vanilla.server.addr.length + 2 * this.botNick.length);
+                    let buf = this.createBuffer(6 + this.agarServer.length + 2 * this.botNick.length);
                     let offset = 0;
                     buf.setUint8(offset++, 2);
-                    for (let i = 0; i < window.vanilla.server.addr.length; i++) buf.setUint8(offset++, window.vanilla.server.addr.charCodeAt(i));
+                    for (let i = 0; i < this.agarServer.length; i++) buf.setUint8(offset++, this.agarServer.charCodeAt(i));
                     offset++;
                     for (let i = 0; i < this.botNick.length; i++) {
                         buf.setUint16(offset, this.botNick.charCodeAt(i), true);
@@ -222,7 +220,6 @@ if(window.location.origin == "http://agar.io") {
                     offset += 2;
                     buf.setUint16(offset, this.botAmount, true);
                     this.send(buf);
-                    $('#timeLeft').html("0");
                     $('#toggleButton').replaceWith(`<button id='toggleButton' onclick='window.client.stopBots();' class='btn btn-danger'>Stop Bots</button>`);
                 }
 
@@ -349,69 +346,37 @@ if(window.location.origin == "http://agar.io") {
                     setTimeout(this.addMoveHook.bind(this), 10000);
                     this.addKeyHooks();
                 }
-
+            
                 addKeyHooks() {
                     window.addEventListener('keydown', this.onkeydown.bind(this));
-                    window.addEventListener('keyup', this.onkeyup.bind(this));
                 }
-
+            
                 onkeydown(event) {
                     if (!window.MC || !MC.isInGame()) return;
                     switch (event.which) {
                         case 88:
                             client.split();
-                            if(window.client.splitBC == false) {
-                                window.client.splitBC = true;
-                                $("#splitB").addClass("slv2_active");
-                            }
                             break;
                         case 67:
                             client.eject();
-                            if(window.client.ejectBC == false) {
-                                window.client.ejectBC = true;
-                                $("#ejectB").addClass("slv2_active");
-                            }
                             break;
                         case 80:
-                            if(!window.client.clientSwitcher) {
-                                window.client.clientSwitcher = true;
-                                client.toggleAI();
-                                client.sendBotMode('BOTAI');
-                                $("#collectB").addClass("slv2_active");
-                            } else if(window.client.clientSwitcher) {
-                                window.client.clientSwitcher = false;
-                                client.sendBotMode();
-                                $("#collectB").removeClass("slv2_active");
-                            }
+                            client.toggleAI();
                             break;
                     }
-                }
-
-                onkeyup(event) {
-                    if (!window.MC || !MC.isInGame()) return;
-                    switch (event.which) {
-                        case 88:
-                            if(window.client.splitBC == true) {
-                                window.client.splitBC = false;
-                                $("#splitB").removeClass("slv2_active");
-                            }
-                            break;
-                        case 67:
-                            if(window.client.ejectBC == true) {
-                                window.client.ejectBC = false;
-                                $("#ejectB").removeClass("slv2_active");
-                            }
-                            break;
+                    if (event.keyCode == 16) {
+                        for (let i = 0; i < 11; i++) setTimeout(window.core.split, this.speed * i);
                     }
                 }
-
+            
+            
                 eject() {
                     if (this.ejectDown) {
                         window.core.eject();
                         setTimeout(this.eject.bind(this), this.speed);
                     }
                 }
-
+            
                 addMoveHook() {
                     window.core._setTarget = window.core.setTarget;
                     window.core.setTarget = function() {
@@ -420,36 +385,137 @@ if(window.location.origin == "http://agar.io") {
                     }.bind(this);
                 }
             }
-            setTimeout(function() {
-                window.mouseX = 0;
-                window.mouseY = 0;
-                document.addEventListener('mousemove', evt => {
-                    window.mouseX = evt.clientX - window.innerWidth / 2;
-                    window.mouseY = evt.clientY - window.innerHeight / 2;
-                });
-
-                window.getMousePos = function() {
-                    let x = window.vanilla.player.x - (window.vanilla.map.x1 + window.vanilla.map.width / 2),
-                        y = window.vanilla.player.y - (window.vanilla.map.y1 + window.vanilla.map.height / 2);
-                    return {
-                        x: x + window.mouseX / window.vanilla.settings.scale,
-                        y: y + window.mouseY / window.vanilla.settings.scale
-                    };
+            
+            class Minimap {
+                constructor() {
+                    this.canvas = null;
+                    this.ctx = null;
+                    this.init();
                 }
+            
+                init() {
+                    this.createCanvas();
+                    requestAnimationFrame(this.drawUpdate.bind(this));
+                }
+            
+                createCanvas() {
+                    if (!document.body) return setTimeout(this.createCanvas.bind(this), 100);
+                    this.canvas = document.createElement("canvas");
+                    this.ctx = this.canvas.getContext('2d');
+            
+                    this.addCanvasCustomization();
+                    document.body.appendChild(this.canvas);
+                }
+            
+                addCanvasCustomization() {
+                    this.canvas.id = "Minimap";
+                    this.canvas.width = 200;
+                    this.canvas.height = 200;
+                    this.canvas.style.position = "absolute";
+                    this.canvas.style.top = "74.9%";
+                    this.canvas.style.right = "0%";
+                    this.drawUpdate();
+                }
+            
+                clearCanvas() {
+                    this.ctx.save();
+                    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.ctx.restore();
+                }
+            
+                drawUpdate() {
+                    if (!this.ctx) return;
+                    this.clearCanvas();
+            
+                    const cWidth = this.canvas.width;
+                    const cHeight = this.canvas.height;
+            
+                    this.ctx.strokeStyle = "#444444";
+                    this.ctx.strokeWidth = 1;
+                    this.ctx.beginPath();
+                    this.ctx.globalAlpha = 0.9;
+                    this.ctx.rect(0, 0, cWidth, cHeight);
+                    this.ctx.fillStyle = "rgba(0, 0, 0, 0.27)";
+                    this.ctx.fill();
+                    this.drawCellUpdate(window.playerX, window.playerY, "#FF0000");
+                    if (window.bots.length > 0) this.drawBotUpdate();
+                    requestAnimationFrame(this.drawUpdate.bind(this));
+                }
+            
+                drawCellUpdate(x, y, color) {
+                    const transX = (7071 + x) / 14142 * this.canvas.height;
+                    const transY = (7071 + y) / 14142 * this.canvas.width;
+            
+                    this.ctx.fillStyle = color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(transX, transY, 6, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                }
+            
+                drawBotUpdate() {
+                    for (const bot of window.bots) {
+                        const botTransX = (7071 + bot.xPos) / 14142 * this.canvas.height;
+                        const botTransY = (7071 + bot.yPos) / 14142 * this.canvas.width;
+            
+                        this.ctx.fillStyle = "#FFFF00";
+                        this.ctx.beginPath();
+                        if (bot.xPos !== 0 && bot.yPos !== 0) {
+                            this.ctx.arc(botTransX, botTransY, 6, 0, 2 * Math.PI);
+                        }
+                        this.ctx.fill();
+                    }
+                }
+            }
+            setTimeout(function() {
+                window.minimap = new Minimap();
                 window.client = new Client();
-                new Macro();
-
-                if (!localStorage.getItem('agarUnlimited2UUID')) localStorage.setItem('agarUnlimited2UUID', window.client.createUUID());
-                if (!localStorage.getItem('botMode')) localStorage.setItem('botMode', 'FEEDER');
-                if (!localStorage.getItem('botNick')) localStorage.setItem('botNick', '');
-                if (!localStorage.getItem('botAmount')) localStorage.setItem('botAmount', 500);
-                if (!localStorage.getItem('extraZoom')) localStorage.setItem('extraZoom', true);
-                window.client.UUID = localStorage.getItem('agarUnlimited2UUID');
-
-                new GUITweaker();
-            },7500);
-        })
-    }, 0);
+                window.gui = new GUITweaker();
+                window.macros = new Macro();
+                window.client.UUID = localStorage.getItem('agarUnlimited2UUID') || window.client.createUUID();
+            },1000);
+            
+            window.draw = () => {
+                if (!window.minX || !window.minY || !window.maxX || !window.maxY) return;
+                const ctx = document.getElementById('canvas').getContext('2d');
+                ctx.save();
+                ctx.strokeStyle = '#0000ff';
+                ctx.lineWidth = 20;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.beginPath();
+                ctx.moveTo(window.minX, window.minY);
+                ctx.lineTo(window.maxX, window.minY);
+                ctx.lineTo(window.maxX, window.maxY);
+                ctx.lineTo(window.minX, window.maxY);
+                ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+                window.core.setFpsCap(120);
+            }
+            
+            
+            $.ajax('http://agar.io/agario.core.js', { // edit core for get server IP, player position and etc
+                success: core => {
+                    core = core.replace(/([\w$]+\(\d+,\w\[\w>>2\]\|0,(\+\w),(\+\w)\)\|0;[\w$]+\(\d+,\w\[\w>>2\]\|0,\+-(\+\w\[\w\+\d+>>3\]),\+-(\+\w\[\w\+\d+>>3\])\)\|0;)/i, '$1 window.viewScale=$2; if(window.core.setFpsCap) {window.core.setFpsCap(999)};if (window.coordOffsetFixed) { window.playerX=$4+window.offsetX; window.playerY=$5+window.offsetY;} if(window.draw){window.draw();}');
+                    core = core.replace(/(\w\[\w\+(\d+)>>3]=(\w);\w\[\w\+(\d+)>>3]=(\w);\w\[\w\+(\d+)>>3]=(\w);\w\[\w\+(\d+)>>3]=(\w);\w\=\w\+(\d+)\|(\d+);)/i, '$1 function setMapCoords(_0x7e8bx1, _0x7e8bx2, _0x7e8bx3, _0x7e8bx4, _0x7e8bx5, _0x7e8bx6) { if (_0x7e8bx6 - _0x7e8bx5 == 24) { if (_0x7e8bx3 - _0x7e8bx1 > 14E3) { if (_0x7e8bx4 - _0x7e8bx2 > 14E3) { window.offsetX = 7071.067811865476 - _0x7e8bx3; window.offsetY = 7071.067811865476 - _0x7e8bx4; window.minX = _0x7e8bx1;window.minY=_0x7e8bx2;window.maxX=_0x7e8bx3;window.maxY=_0x7e8bx4; window.coordOffsetFixed = true; } } } } setMapCoords($3,$5,$7,$9,$2,$8);');
+                    core = core.replace(/var (\w)=new WebSocket\((\w\(\w\))\);/, 'window.client.agarServer=$2;var $1=new WebSocket(window.client.agarServer);');
+                    core = core.replace(/(function\(\w\){)(\w.\w\[\w\].stroke\(\))(})/, '$1 $3');
+                    core = core.replace(/if\((\+\w\[\w>>3\])<1\.0\){/i, 'if($1<!client.extraZoom){return;} else {return;}');
+                    eval(core);
+                },
+                dataType: 'text',
+                method: 'GET',
+                cache: false,
+                crossDomain: true
+            });
+            
+            if (!localStorage.getItem('showMinimap')) localStorage.setItem('showMinimap', true);
+            if (!localStorage.getItem('botMode')) localStorage.setItem('botMode', 'FEEDER');
+            if (!localStorage.getItem('botNick')) localStorage.setItem('botNick', 'MrSonicMaster');
+            if (!localStorage.getItem('botAmount')) localStorage.setItem('botAmount', 100);
+            if (!localStorage.getItem('extraZoom')) localStorage.setItem('extraZoom', true);
+            JSON.parse(localStorage.getItem('showMinimap')) ? $("#Minimap").show() : $("#Minimap").hide();
 } else if(window.location.origin == "http://slither.io") {
     window.bots = [];
     window.fcbots = [];
