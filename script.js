@@ -10,6 +10,7 @@
 // @run-at       document-start
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
+
 if (location.host === "agar.io" && location.pathname === "/") {
     location.href = "http://agar.io/op-client" + location.hash;
     return;
