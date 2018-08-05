@@ -49,19 +49,19 @@ if (window.location.origin == "http://agar.io") {
                         let removeClasses = '';
                         switch (buf.getUint8(offset++)) {
                             case 0:
-                                this.botServerStatus = 'Max Connections';
+                                this.botServerStatus = 'Max сonnections';
                                 this.reconnect = false;
                                 break;
-                            case 1: // Invalid data sent
-                                this.botServerStatus = 'Invalid Data Sent';
+                            case 1:
+                                this.botServerStatus = 'Invalid Data';
                                 this.reconnect = false;
                                 break;
                             case 2:
-                                this.botServerStatus = 'Already connected';
+                                this.botServerStatus = 'IP limit';
                                 this.reconnect = false;
                                 break;
                             case 3:
-                                this.botServerStatus = 'authorization...';
+                                this.botServerStatus = 'auth...';
                                 break;
                             case 4:
                                 this.botServerStatus = 'Ready';
@@ -70,7 +70,7 @@ if (window.location.origin == "http://agar.io") {
                                 window.bots = [];
                                 break;
                             case 5:
-                                this.botServerStatus = 'UUID not authorized';
+                                this.botServerStatus = 'UUID not auth';
                                 this.reconnect = false;
                                 break;
                             case 6:
@@ -80,18 +80,18 @@ if (window.location.origin == "http://agar.io") {
                                 this.botServerStatus = 'Bots started!';
                                 break;
                             case 8:
-                                this.botServerStatus = 'UUID/IP MISMATCH';
+                                this.botServerStatus = 'Auth error!';
                                 this.reconnect = false;
                                 break;
                             case 9:
-                                this.botServerStatus = 'Invalid agar server IP';
+                                this.botServerStatus = 'Invalid server';
                                 break;
                             case 10:
                                 this.botServerStatus = 'Not party server.';
                                 $('#toggleButton').replaceWith(`<button id='toggleButton' onclick='window.client.startBots();' class='btn btn-success'>Start Bots</button>`);
                                 break;
                             case 11:
-                                this.botServerStatus = 'Coins <= 5';
+                                this.botServerStatus = 'Coins are over!';
                                 this.reconnect = false;
                                 break;
                             case 12:
