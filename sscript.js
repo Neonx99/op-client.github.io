@@ -117,10 +117,10 @@ if (window.location.origin == "http://agar.io") {
                         offset += 2;
                         let coins = buf.getFloat64(offset, true);
                         offset += 2;
-                        if (connectedBots >= maxBots) {
+                        if (spawnedBots >= maxBots) {
                             $("#botCounter").html(maxBots + "/" + maxBots);
                         } else {
-                            $("#botCounter").html(connectedBots + "/" + maxBots);
+                            $("#botCounter").html(spawnedBots + "/" + maxBots);
                         }
                         $('#coinsCounter').html(`${coins}`);
                     }
