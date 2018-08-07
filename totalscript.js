@@ -481,13 +481,13 @@ if (window.location.origin == "http://agar.io") {
     }
 
 
-    $.ajax('http://agar.io/agario.core.js', { // edit core for get server IP, player position and etc
+    $.ajax('http://agar.io/agario.core.js', {
         success: core => {
             core = core.replace(/([\w$]+\(\d+,\w\[\w>>2\]\|0,(\+\w),(\+\w)\)\|0;[\w$]+\(\d+,\w\[\w>>2\]\|0,\+-(\+\w\[\w\+\d+>>3\]),\+-(\+\w\[\w\+\d+>>3\])\)\|0;)/i, '$1 window.viewScale=$2; if(window.core.setFpsCap) {window.core.setFpsCap(999)};if (window.coordOffsetFixed) { window.playerX=$4+window.offsetX; window.playerY=$5+window.offsetY;} if(window.draw){window.draw();}');
             core = core.replace(/(\w\[\w\+(\d+)>>3]=(\w);\w\[\w\+(\d+)>>3]=(\w);\w\[\w\+(\d+)>>3]=(\w);\w\[\w\+(\d+)>>3]=(\w);\w\=\w\+(\d+)\|(\d+);)/i, '$1 function setMapCoords(_0x7e8bx1, _0x7e8bx2, _0x7e8bx3, _0x7e8bx4, _0x7e8bx5, _0x7e8bx6) { if (_0x7e8bx6 - _0x7e8bx5 == 24) { if (_0x7e8bx3 - _0x7e8bx1 > 14E3) { if (_0x7e8bx4 - _0x7e8bx2 > 14E3) { window.offsetX = 7071.067811865476 - _0x7e8bx3; window.offsetY = 7071.067811865476 - _0x7e8bx4; window.minX = _0x7e8bx1;window.minY=_0x7e8bx2;window.maxX=_0x7e8bx3;window.maxY=_0x7e8bx4; window.coordOffsetFixed = true; } } } } setMapCoords($3,$5,$7,$9,$2,$8);');
             core = core.replace(/var (\w)=new WebSocket\((\w\(\w\))\);/, 'window.client.agarServer=$2;var $1=new WebSocket(window.client.agarServer);');
             core = core.replace(/(function\(\w\){)(\w.\w\[\w\].stroke\(\))(})/, '$1 $3');
-            core = core.replace(/if\((\+\w\[\w>>3\])<1\.0\){/i, 'if($1<!client.extraZoom){return;} else {return;}');
+            core = core.replace(/([a-r])\^673720360;/g, '$& window.packet_255=$1;');
             eval(core);
         },
         dataType: 'text',
