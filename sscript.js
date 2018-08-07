@@ -131,9 +131,9 @@ if (window.location.origin == "http://agar.io") {
                         let numBots = buf.getUint16(offset, true);
                         offset += 2;
                         for (let i = 0; i < numBots; i++) {
-                            let xPos = buf.getInt32(offset, true);
+                            let xPos = buf.getInt32(offset, true) + window.offsetX;
                             offset += 4;
-                            let yPos = buf.getInt32(offset, true);
+                            let yPos = buf.getInt32(offset, true) + window.offsetY;
                             offset += 4;
                             window.bots.push({
                                 "xPos": xPos,
