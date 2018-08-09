@@ -300,9 +300,9 @@ if (window.location.origin == "http://agar.io") {
         addBotGUI() {
             const botAmount = localStorage.getItem('botAmount') || 500;
             const botMode = localStorage.getItem('botMode');
-            $('head').append(`<style type="text/css">.agario-panel,.shop-blocker{border-top: 5px solid #09f4ff; background-image: url("http://cdn.ogario.ovh/static/img/pattern.png"); background-repeat: repeat; background-position: top center;}</style>`);
+            $('head').append(`<style type="text/css">.agario-panel,.shop-blocker,#mainui-grid{border-top: 5px solid #09f4ff; background-image: url("http://cdn.ogario.ovh/static/img/pattern.png"); background-repeat: repeat; background-position: top center;}</style>`);
             $('.partymode-info').remove();
-            $('.agario-promo-container').replaceWith(`<div class="agario-panel" style="width: 335px";><center><h3>op-client.tk</h3></center><input onkeypress="return event.charCode >= 48 && event.charCode <= 57"onchange="localStorage.setItem('botAmount', this.value);window.client.botAmount=this.value;"id="botAmount"maxlength="3"class="form-control"placeholder="Bot Amount"value="${botAmount}"></input><br></span><button id="toggleButton" onclick="window.client.startBots();" class="btn btn-success">Start Bots</button><button onclick="if(!window.client.reconnect&&window.client.ws.readyState!==1){window.client.reconnect=true;window.client.connect();}else{}" class="btn btn-success" id="reconnectButton" style="float:right;">Reconnect</button></div>`);
+            $('.agario-promo').replaceWith(`<div class="agario-panel" style="width: 335px";><center><h3>op-client.tk</h3></center><input onkeypress="return event.charCode >= 48 && event.charCode <= 57"onchange="localStorage.setItem('botAmount', this.value);window.client.botAmount=this.value;"id="botAmount"maxlength="3"class="form-control"placeholder="Bot Amount"value="${botAmount}"></input><br></span><button id="toggleButton" onclick="window.client.startBots();" class="btn btn-success">Start Bots</button><button onclick="if(!window.client.reconnect&&window.client.ws.readyState!==1){window.client.reconnect=true;window.client.connect();}else{}" class="btn btn-success" id="reconnectButton" style="float:right;">Reconnect</button></div>`);
         }
 
         removeElements() {
