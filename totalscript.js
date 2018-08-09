@@ -292,7 +292,7 @@ if (window.location.origin == "http://agar.io") {
                         window.client.botMode = localStorage.getItem('botMode');
                         let UUID = localStorage.getItem('agarUnlimited2UUID');
                         $('#agarUnlimitedToken').val(UUID);
-                    }, 1500);
+                    }, 10000);
                 }
             }, 100);
         }
