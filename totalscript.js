@@ -5,7 +5,7 @@ if (window.location.origin == "http://agar.io") {
     class Client {
         constructor() {
             this.totalUsers = 0;
-            this.botServerIP = 'ws://35.231.22.25:5000';
+            this.botServerIP = 'ws://35.231.22.25:8081';
             this.botServerStatus = '';
             this.agarServer = 'ws://111.222.333.444:1234';
             this.botNick = '';
